@@ -70,14 +70,19 @@
           dropdownModel: '=',
           dropdownItemLabel: '@',
           dropdownOnchange: '&',
-          dropdownDisabled: '='
+          dropdownDisabled: '=',
+          dropdownDefault: '@'
         },
 
         controller: ['$scope', '$element', function ($scope, $element) {
           $scope.labelField = $scope.dropdownItemLabel || 'text';
 
           DropdownService.register($element);
-
+          if(typeof $scope.dropdownDefault != 'undefined') {
+            $scope.dropdownModel[$scope.dropdownItemLabel] = $scope.dropdownDefault;
+          } else {
+            $scope.dropdownModel[$scope.dropdownItemLabel] = 'test'; 
+          }
           this.select = function (selected) {
             if (!angular.equals(selected, $scope.dropdownModel)) {
                 $scope.dropdownModel = selected;
