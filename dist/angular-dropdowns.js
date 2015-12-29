@@ -8,7 +8,7 @@ var dd = angular.module('ngDropdowns', []);
 
 dd.run(['$templateCache', function ($templateCache) {
   $templateCache.put('ngDropdowns/templates/dropdownSelect.html', [
-    '<div class="wrap-dd-select">',
+    '<div ng-disabled="dropdownDisabled" ng-class="{\'disabled\': dropdownDisabled}" class="wrap-dd-select">',
       '<span class="selected">{{dropdownModel[labelField]}}</span>',
       '<ul class="dropdown">',
         '<li ng-repeat="item in dropdownSelect"',
@@ -70,7 +70,8 @@ dd.directive('dropdownSelect', ['DropdownService',
         dropdownModel: '=',
         dropdownItemLabel: '@',
         dropdownOnchange: '&',
-          dropdownDefault: '@'
+        dropdownDisabled: '=',
+        dropdownDefault: '@'
       },
 
       controller: ['$scope', '$element', function ($scope, $element) {
@@ -93,7 +94,9 @@ dd.directive('dropdownSelect', ['DropdownService',
 
         $element.bind('click', function (event) {
           event.stopPropagation();
-          DropdownService.toggleActive($element);
+          if(!$scope.dropdownDisabled) {
+            DropdownService.toggleActive($element);
+          }
         });
 
         $scope.$on('$destroy', function () {
@@ -138,7 +141,8 @@ dd.directive('dropdownMenu', ['$parse', '$compile', 'DropdownService', '$templat
         dropdownMenu: '=',
         dropdownModel: '=',
         dropdownItemLabel: '@',
-        dropdownOnchange: '&'
+        dropdownOnchange: '&',
+        dropdownDisabled: '='
       },
 
       controller: ['$scope', '$element', function ($scope, $element) {
@@ -168,7 +172,9 @@ dd.directive('dropdownMenu', ['$parse', '$compile', 'DropdownService', '$templat
 
         $element.bind('click', function (event) {
           event.stopPropagation();
-          DropdownService.toggleActive(tpl);
+          if(!$scope.dropdownDisabled) {
+            DropdownService.toggleActive(tpl);
+          }
         });
 
         $scope.$on('$destroy', function () {
